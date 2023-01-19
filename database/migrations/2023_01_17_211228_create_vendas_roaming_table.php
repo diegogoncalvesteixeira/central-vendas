@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('vendas_roaming', function (Blueprint $table) {
             $table->id();
             $table->foreignId('venda_id')->constrained('vendas')->onDelete('cascade');
-            $table->foreignId('unidade_id')->constrained('vendas');
+            $table->foreignId('unidade_id')->constrained('unidades');
             $table->timestamps();
         });
     }

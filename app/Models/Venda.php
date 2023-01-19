@@ -7,10 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 
 class Venda extends Model
 {
     use HasFactory;
+    
+    protected $table = 'vendas';
     
     protected $fillable = [
         'user_id',
@@ -30,8 +33,20 @@ class Venda extends Model
         return $this->belongsTo(Unidade::class);
     }
     
-    public function user(): BelongsTo
+    public function vendedor(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    
+    public function diretoria(): HasOneThrough
+    {
+        return $this->hasOneThrough(
+        Diretoria::class,
+        Unidade::class,
+        'id',
+        'id',
+        'unidade_id',
+        'diretoria_id'
+        );
     }
 }

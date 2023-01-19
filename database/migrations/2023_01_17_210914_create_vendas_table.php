@@ -20,6 +20,6 @@ return new class extends Migration {
     
     public function down()
     {
-        Schema::dropIfExists('vendas_tabela');
+        Schema::dropIfExists('vendas');
     }
 };

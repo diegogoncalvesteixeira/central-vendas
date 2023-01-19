@@ -24,4 +24,9 @@ class Unidade extends Model
     {
         return $this->belongsTo(Diretoria::class);
     }
+    
+    public function vendas(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Venda::class);
+    }
 }

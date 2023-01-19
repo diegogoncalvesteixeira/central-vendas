@@ -10,6 +10,8 @@ class VendaRoaming extends Model
 {
     use HasFactory;
     
+    protected $table = 'vendas_roaming';
+    
     protected $fillable = [
         'venda_id',
         'unidade_id',

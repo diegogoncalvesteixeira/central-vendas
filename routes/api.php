@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\VendaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,4 +21,11 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
+});
+
+Route::controller(VendaController::class)->group(function () {
+    Route::post('vendas/cadastro', 'cadastro');
+    Route::get('vendas/detalhes/{id}', 'detalhes');
+    Route::get('vendas/lista', 'lista');
+    Route::get('vendas/numeros', 'numeros');
 });

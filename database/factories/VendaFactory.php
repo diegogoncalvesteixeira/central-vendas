@@ -10,8 +10,9 @@ class VendaFactory extends Factory
 {
     public function definition(): array
     {
-        $user = User::factory()->create()->id;
-        $user->assignRole('vendedor');
+        $user = User::whereHas('roles', function($q){
+            $q->where('name', 'Vendedor');
+        })->first();
         $user->unidades()->attach(Unidade::first()->id);
         
         return [

@@ -29,4 +29,15 @@ class Unidade extends Model
     {
         return $this->hasMany(Venda::class);
     }
+    
+    public function users(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    {
+        return $this->hasManyThrough(User::class,
+        UserUnidade::class,
+        'unidade_id',
+        'id',
+        'id',
+        'user_id'
+        );
+    }
 }

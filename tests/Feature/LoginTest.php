@@ -22,11 +22,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(200);
         $content = json_decode($response->getContent());
-        $this->assertObjectHasAttribute('authorisation', $content);
-        
-        $token = $content->authorisation;
-        $this->assertObjectHasAttribute('token', $token);
-        $this->assertObjectHasAttribute('type', $token);
+        $this->assertObjectHasAttribute('authorization', $content);
     }
     
     public function testLoginDiretor(){
@@ -40,11 +36,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(200);
         $content = json_decode($response->getContent());
-        $this->assertObjectHasAttribute('authorisation', $content);
-        
-        $token = $content->authorisation;
-        $this->assertObjectHasAttribute('token', $token);
-        $this->assertObjectHasAttribute('type', $token);
+        $this->assertObjectHasAttribute('authorization', $content);
     }
     
     public function testGerente(){
@@ -58,11 +50,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(200);
         $content = json_decode($response->getContent());
-        $this->assertObjectHasAttribute('authorisation', $content);
-        
-        $token = $content->authorisation;
-        $this->assertObjectHasAttribute('token', $token);
-        $this->assertObjectHasAttribute('type', $token);
+        $this->assertObjectHasAttribute('authorization', $content);
     }
     
     public function testVendedor(){
@@ -76,11 +64,7 @@ class LoginTest extends TestCase
         ]);
         $response->assertStatus(200);
         $content = json_decode($response->getContent());
-        $this->assertObjectHasAttribute('authorisation', $content);
-        
-        $token = $content->authorisation;
-        $this->assertObjectHasAttribute('token', $token);
-        $this->assertObjectHasAttribute('type', $token);
+        $this->assertObjectHasAttribute('authorization', $content);
     }
     
     public function testUsuarioInvalido(){

@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "firebase/php-jwt": "^6.3",
         "geocoder/geocoder": "^1.4",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^9.19",
@@ -50,7 +51,7 @@
             "@php artisan key:generate --ansi"
         ],
         "start": "php -S localhost:8080 -t public",
-        "implementar": "composer install && php artisan migrate:refresh && php artisan db:seed && php artisan jwt:secret && composer start"
+        "implementar": "composer install && php artisan migrate:refresh && php artisan db:seed && php artisan jwt:secret"
     },
     "extra": {
         "laravel": {

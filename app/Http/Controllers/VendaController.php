@@ -7,6 +7,9 @@ use App\Http\Requests\VendaCadastroRequest;
 use App\Http\Services\VendaService;
 use App\Models\Venda;
 use App\Models\Unidade;
+use App\Http\Middleware\ApiMiddleware;
+use App\Models\User;
+
 
 class VendaController extends Controller
 {
@@ -14,7 +17,7 @@ class VendaController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:api');
+        $this->middleware(ApiMiddleware::class);
         $this->vendaService = new VendaService();
     }
     
@@ -36,18 +39,19 @@ class VendaController extends Controller
         ]);
     }
     
-    public function lista(){
-        $user = auth()->user();
+    public function lista(Request $request){
+        $user_id = $request->user_id;
+        $user = User::find($user_id);
         $role = collect($user->getRoleNames())->first();
         
         if($role == 'Diretor Geral'){
             $vendas = $this->vendaService->listagem_vendas_para_diretor_geral();
         }elseif($role=='Diretor'){
-            $vendas = $this->vendaService->listagem_vendas_para_diretor();
+            $vendas = $this->vendaService->listagem_vendas_para_diretor($user_id);
         }elseif($role=='Gerente'){
-            $vendas = $this->vendaService->listagem_vendas_para_gerente();
+            $vendas = $this->vendaService->listagem_vendas_para_gerente($user_id);
         }elseif($role=='Vendedor'){
-            $vendas = $this->vendaService->listagem_vendas_para_vendedor();
+            $vendas = $this->vendaService->listagem_vendas_para_vendedor($user_id);
         
         }
         
@@ -57,8 +61,20 @@ class VendaController extends Controller
         ]);
     }
     
-    public function numeros(){
-        $unidades = Unidade::withCount('vendas')->get();
+    public function numeros(Request $request){
+        $user_id = $request->user_id;
+        $user = User::find($user_id);
+        $role = collect($user->getRoleNames())->first();
+    
+        if($role == 'Diretor Geral'){
+            $unidades = $this->vendaService->numeros_vendas_por_unidade_para_diretor_geral();
+        }elseif($role=='Diretor'){
+            $unidades = $this->vendaService->numeros_vendas_por_unidade_para_diretor($user_id);
+        }elseif($role=='Gerente'){
+            $unidades = $this->vendaService->numeros_vendas_por_unidade_para_gerente($user_id);
+        }elseif($role=='Vendedor'){
+            $unidades = $this->vendaService->numeros_vendas_por_unidade_para_vendedor($user_id);
+        }
         
         return response()->json([
             'status' => 'success',

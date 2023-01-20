@@ -31,7 +31,7 @@ class VendedorSeeder extends Seeder
             $user = User::factory()->create([
                 'name' => $vendedor['nome'],
                 'email' => $vendedor['email'],
-                'password' => bcrypt('123456'),
+                'password' => bcrypt('123mudar'),
             ]);
             $user->assignRole('Vendedor');
             $user->unidades()->attach($vendedor['unidade']);

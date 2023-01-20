@@ -17,14 +17,23 @@ class VendaTest extends TestCase
             $q->where('name', 'Vendedor');
         })->first();
         
-        $this->be($vendedor);
+        $response = $this->post('/api/login', [
+            'email' => $vendedor->email,
+            'password' => '123mudar'
+        ]);
+        
+        $content = json_decode($response->getContent());
+        $token = $content->authorization->token;
         
         $response = $this->post('/api/vendas/cadastro', [
             'vendedor_id' => $vendedor->id,
             'latitude_longitude' => '-30.048750057541955, -51.228587422990806',
             'data_hora_venda' => now(),
-            'valor_total' => $this->faker->randomFloat(2, 0, 1000)
+            'valor_total' => $this->faker->randomFloat(2, 0, 1000),
+        ], [
+            'Authorization' => 'Bearer ' . $token
         ]);
+        
         $response->assertStatus(200);
         
         $content = json_decode($response->getContent());
@@ -46,10 +55,19 @@ class VendaTest extends TestCase
         $diretor_geral = User::whereHas('roles', function($q){
             $q->where('name', 'Diretor Geral');
         })->first();
-        $this->be($diretor_geral);
+    
+        $response = $this->post('/api/login', [
+        'email' => $diretor_geral->email,
+        'password' => '123mudar'
+        ]);
+    
+        $content = json_decode($response->getContent());
+        $token = $content->authorization->token;
         
         $venda = Venda::factory()->create();
-        $response = $this->get('/api/vendas/detalhes/' . $venda->id);
+        $response = $this->get('/api/vendas/detalhes/' . $venda->id,[
+            'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertStatus(200);
         self::assertIsObject(json_decode($response->getContent()));
     }
@@ -58,9 +76,18 @@ class VendaTest extends TestCase
         $diretor_geral = User::whereHas('roles', function($q){
             $q->where('name', 'Diretor Geral');
         })->first();
-        $this->be($diretor_geral);
+    
+        $response = $this->post('/api/login', [
+        'email' => $diretor_geral->email,
+        'password' => '123mudar'
+        ]);
+    
+        $content = json_decode($response->getContent());
+        $token = $content->authorization->token;
         
-        $response = $this->get('/api/vendas/lista');
+        $response = $this->get('/api/vendas/lista',[
+        'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertStatus(200);
         self::assertIsObject(json_decode($response->getContent()));
     }
@@ -69,9 +96,18 @@ class VendaTest extends TestCase
         $diretor = User::whereHas('roles', function($q){
             $q->where('name', 'Diretor');
         })->first();
-        $this->be($diretor);
+    
+        $response = $this->post('/api/login', [
+        'email' => $diretor->email,
+        'password' => '123mudar'
+        ]);
+    
+        $content = json_decode($response->getContent());
+        $token = $content->authorization->token;
         
-        $response = $this->get('/api/vendas/lista');
+        $response = $this->get('/api/vendas/lista',[
+            'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertStatus(200);
         self::assertIsObject(json_decode($response->getContent()));
     }
@@ -80,9 +116,18 @@ class VendaTest extends TestCase
         $gerente = User::whereHas('roles', function($q){
             $q->where('name', 'Gerente');
         })->first();
-        $this->be($gerente);
+    
+        $response = $this->post('/api/login', [
+            'email' => $gerente->email,
+            'password' => '123mudar'
+        ]);
+    
+        $content = json_decode($response->getContent());
+        $token = $content->authorization->token;
         
-        $response = $this->get('/api/vendas/lista');
+        $response = $this->get('/api/vendas/lista',[
+        'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertStatus(200);
         self::assertIsObject(json_decode($response->getContent()));
     }
@@ -91,9 +136,18 @@ class VendaTest extends TestCase
         $vendedor = User::whereHas('roles', function($q){
             $q->where('name', 'Vendedor');
         })->first();
-        $this->be($vendedor);
         
-        $response = $this->get('/api/vendas/lista');
+        $response = $this->post('/api/login', [
+        'email' => $vendedor->email,
+        'password' => '123mudar'
+        ]);
+    
+        $content = json_decode($response->getContent());
+        $token = $content->authorization->token;
+        
+        $response = $this->get('/api/vendas/lista',[
+        'Authorization' => 'Bearer ' . $token
+        ]);
         $response->assertStatus(200);
         self::assertIsObject(json_decode($response->getContent()));
     }

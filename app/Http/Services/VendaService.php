@@ -47,21 +47,44 @@ class VendaService
         return Venda::with('vendedor', 'unidade', 'diretoria', 'roaming')->get();
     }
     
-    public function listagem_vendas_para_diretor(){
-        $user = User::where('id', auth()->user()->id)->with('diretorias')->first();
+    public function listagem_vendas_para_diretor($user_id){
+        $user = User::where('id',$user_id)->with('diretorias')->first();
         $diretoria = collect($user->diretorias)->first();
         $unidades = Unidade::where('diretoria_id', $diretoria->id)->get();
         return Venda::with('vendedor', 'unidade', 'diretoria', 'roaming')->whereIn('unidade_id', $unidades->pluck('id'))->get();
     }
     
-    public function listagem_vendas_para_gerente(){
-        $user = User::where('id',auth()->user()->id)->with('unidades')->first();
+    public function listagem_vendas_para_gerente($user_id){
+        $user = User::where('id',$user_id)->with('unidades')->first();
         $unidade = collect($user->unidades)->first();
         return Venda::where('unidade_id',$unidade->id)->with('vendedor', 'unidade', 'diretoria', 'roaming')->get();
     }
     
-    public function listagem_vendas_para_vendedor(){
-        return Venda::where('user_id', auth()->user()->id)->with('vendedor', 'unidade', 'diretoria', 'roaming')->get();
+    public function listagem_vendas_para_vendedor($user_id){
+        return Venda::where('user_id',$user_id)->with('vendedor', 'unidade', 'diretoria', 'roaming')->get();
+    }
+    
+    public function numeros_vendas_por_unidade_para_diretor_geral(){
+        return Unidade::withCount('vendas')->get();
+    }
+    
+    public function numeros_vendas_por_unidade_para_diretor($user_id){
+        $user = User::where('id',$user_id)->with('diretorias')->first();
+        $diretoria = collect($user->diretorias)->first();
+        $unidades = Unidade::where('diretoria_id', $diretoria->id)->get();
+        return Unidade::whereIn('id', $unidades->pluck('id'))->withCount('vendas')->get();
+    }
+    
+    public function numeros_vendas_por_unidade_para_gerente($user_id){
+        $user = User::where('id',$user_id)->with('unidades')->first();
+        $unidade = collect($user->unidades)->first();
+        return Unidade::where('id',$unidade->id)->withCount('vendas')->get();
+    }
+    
+    public function numeros_vendas_por_unidade_para_vendedor($user_id){
+        return Unidade::whereHas('users', function($query) use ($user_id){
+            $query->where('user_id', $user_id);
+        })->withCount('vendas')->get();
     }
     
     
